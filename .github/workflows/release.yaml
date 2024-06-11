@@ -259,7 +259,9 @@ jobs:
           cache: false
       - name: Dependencies
         run: |
-          brew install protobuf grpc
+          brew install abseil cmake go grpc protobuf protoc-gen-go protoc-gen-go-grpc python wget
+          brew install  opencv
+          python -m pip  install grpcio-tools
           go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@8ba23be9613c672d40ae261d2a1335d639bdd59b
           go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.34.0
       - name: Build
@@ -268,7 +270,7 @@ jobs:
           export C_INCLUDE_PATH=/usr/local/include
           export CPLUS_INCLUDE_PATH=/usr/local/include
           export PATH=$PATH:$GOPATH/bin
-          GO_TAGS=p2p make dist
+          GO_TAGS=stablediffusion,tts  BUILD_API_ONLY=false BUILD_GRPC_FOR_BACKEND_LLAMA=true make dist
       - uses: actions/upload-artifact@v4
         with:
           name: LocalAI-MacOS-arm64
